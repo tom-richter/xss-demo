@@ -36,5 +36,5 @@ app.get('/api/posts', (req, res) => {
 })
 
 app.listen(port, () => {
-  console.log(`Target running on http://localhost:${port}`)
+  console.log(`Target running on port ${port}`)
 })
