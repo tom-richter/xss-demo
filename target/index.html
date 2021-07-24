@@ -8,6 +8,7 @@
   </head>
   <body>
     <h1 id="welcome">Welcome to my super secure blog!</h1>
+    <button id="logoutButton" onclick="logout()">Logout</button>
 
     <div id="loginFormWrapper">
       <h2>Login</h2>
@@ -42,7 +43,8 @@
           name="description"
           rows="4"
           cols="50"
-        ></textarea><br>
+        ></textarea
+        ><br />
         <input type="submit" value="Create Post" />
       </form>
     </div>
@@ -60,26 +62,24 @@
               )
               .join(''))
         )
-      if (localStorage.getItem('accessToken')) {
-        fetch('/api/profile', {
-          headers: {
-            Authorization: localStorage.getItem('accessToken'),
-            'Content-Type': 'application/json',
-          },
+
+      fetch('/api/profile', {
+        headers: {
+          Authorization: localStorage.getItem('accessToken'),
+          'Content-Type': 'application/json',
+        },
+      })
+        .then((r) => r.json())
+        .then((user) => {
+          document.getElementById(
+            'welcome'
+          ).innerHTML = `Welcome to my super secure blog, ${user.name}!`
+          document.getElementById('loginFormWrapper').style.display = 'none'
         })
-          .then((r) => r.json())
-          .then((user) => {
-            document.getElementById(
-              'welcome'
-            ).innerHTML = `Welcome to my super secure blog, ${user.name}!`
-            document.getElementById('loginFormWrapper').style.display = 'none'
-          })
-          .catch((e) => {
-            document.getElementById('postFormWrapper').style.display = 'none'
-          })
-      } else {
-        document.getElementById('postFormWrapper').style.display = 'none'
-      }
+        .catch((e) => {
+          document.getElementById('postFormWrapper').style.display = 'none'
+          document.getElementById('logoutButton').style.display = 'none'
+        })
 
       window.addEventListener('load', function () {
         function createPost(postForm) {
@@ -137,6 +137,11 @@
           loginUser(loginForm)
         })
       })
+
+      function logout() {
+        localStorage.clear()
+        location.reload()
+      }
     </script>
   </body>
 </html>
