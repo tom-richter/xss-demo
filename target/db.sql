@@ -15,9 +15,9 @@ CREATE TABLE post (
 );
 
 INSERT INTO users(name, password) VALUES
-  ('admin', '1234'),
-  ('tom', '1234'),
-  ('hacker', '1234');
+  ('admin', 'admin1234'),
+  ('tom', 'tom1234'),
+  ('hacker', 'hacker1234');
 
 INSERT INTO post(user_name, title, description) VALUES
   ('admin', 'This is great', 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.'),

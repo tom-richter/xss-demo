@@ -4,28 +4,46 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>My super secure blog</title>
   </head>
   <body>
     <h1 id="welcome">Welcome to my super secure blog!</h1>
 
     <div id="loginFormWrapper">
       <h2>Login</h2>
-      <form id="loginForm" method="POST">
-        <input type="text" name="username" />
-        <input type="password" name="password" />
-        <input type="submit" />
+      <form id="loginForm">
+        <p>
+          <label for="username">Username:</label>
+          <input id="username" type="text" name="username" />
+        </p>
+        <p>
+          <label for="password">Password:</label>
+          <input id="password" type="password" name="password" />
+        </p>
+        <input type="submit" value="Login" />
       </form>
     </div>
 
+    <h2>Posts</h2>
     <main id="main"></main>
 
     <div id="postFormWrapper">
-      <h2>New Post</h2>
-      <form id="postForm" method="POST">
-        <input type="text" name="title" />
-        <input type="text" name="description" />
-        <input type="submit" />
+      <h2>Create New Post</h2>
+      <form id="postForm">
+        <p>
+          <label for="title">Title:</label>
+          <input id="title" type="text" name="title" />
+        </p>
+        <p>
+          <label for="description">Description:</label>
+        </p>
+        <textarea
+          id="description"
+          name="description"
+          rows="4"
+          cols="50"
+        ></textarea><br>
+        <input type="submit" value="Create Post" />
       </form>
     </div>
 
@@ -38,7 +56,7 @@
             (main.innerHTML = posts
               .map(
                 (post) =>
-                  `<h2>${post.title}</h2><p>by ${post.user_name}</p><p>${post.description}</p>`
+                  `<h3>${post.title}</h3><p>by ${post.user_name}</p><p>${post.description}</p><hr>`
               )
               .join(''))
         )
@@ -78,7 +96,10 @@
               'Content-Type': 'application/json',
             },
             body: JSON.stringify(post),
-          }).then((r) => console.log(r))
+          }).then((r) => {
+            postForm.reset()
+            location.reload()
+          })
         }
         function loginUser(loginForm) {
           const formData = Array.from(new FormData(loginForm))
@@ -97,6 +118,7 @@
             .then((r) => r.json())
             .then((r) => {
               localStorage.setItem('accessToken', r.accessToken)
+              loginForm.reset()
               location.reload()
             })
         }
