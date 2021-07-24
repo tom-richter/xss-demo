@@ -7,10 +7,9 @@
     <title>Document</title>
   </head>
   <body>
-    <h1>Welcome to my super secure blog!</h1>
-    <main id="main"></main>
+    <h1 id="welcome">Welcome to my super secure blog!</h1>
 
-    <div>
+    <div id="loginFormWrapper">
       <h2>Login</h2>
       <form id="loginForm" method="POST">
         <input type="text" name="username" />
@@ -19,7 +18,9 @@
       </form>
     </div>
 
-    <div>
+    <main id="main"></main>
+
+    <div id="postFormWrapper">
       <h2>New Post</h2>
       <form id="postForm" method="POST">
         <input type="text" name="title" />
@@ -41,6 +42,26 @@
               )
               .join(''))
         )
+      if (localStorage.getItem('accessToken')) {
+        fetch('/api/profile', {
+          headers: {
+            Authorization: localStorage.getItem('accessToken'),
+            'Content-Type': 'application/json',
+          },
+        })
+          .then((r) => r.json())
+          .then((user) => {
+            document.getElementById(
+              'welcome'
+            ).innerHTML = `Welcome to my super secure blog, ${user.name}!`
+            document.getElementById('loginFormWrapper').style.display = 'none'
+          })
+          .catch((e) => {
+            document.getElementById('postFormWrapper').style.display = 'none'
+          })
+      } else {
+        document.getElementById('postFormWrapper').style.display = 'none'
+      }
 
       window.addEventListener('load', function () {
         function createPost(postForm) {
@@ -74,7 +95,10 @@
             body: JSON.stringify(user),
           })
             .then((r) => r.json())
-            .then((r) => localStorage.setItem('accessToken', r.accessToken))
+            .then((r) => {
+              localStorage.setItem('accessToken', r.accessToken)
+              location.reload()
+            })
         }
 
         const postForm = document.getElementById('postForm')

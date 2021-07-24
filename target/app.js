@@ -40,6 +40,10 @@ app.get('/api/posts', (req, res) => {
     .catch((e) => console.error(e.stack))
 })
 
+app.get('/api/profile', authenticateToken, (req, res) => {
+  res.json(req.user)
+})
+
 app.get('/api/users', authenticateToken, (req, res) => {
   client
     .query('SELECT * FROM users')
