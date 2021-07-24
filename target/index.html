@@ -7,41 +7,90 @@
     <title>Document</title>
   </head>
   <body>
-    <style>
-      .hide { position:absolute; top:-1px; left:-1px; width:1px; height:1px; }
-    </style>
-    <h1>Welcome to my awesome blog!</h1>
+    <h1>Welcome to my super secure blog!</h1>
     <main id="main"></main>
-    <iframe name="hiddenFrame" class="hide"></iframe>
 
     <div>
       <h2>Login</h2>
-      <form method="POST" action="/api/login" target="hiddenFrame">
-        <input type="text" name="username">
-        <input type="password" name="password">
-        <input type="submit">
+      <form id="loginForm" method="POST">
+        <input type="text" name="username" />
+        <input type="password" name="password" />
+        <input type="submit" />
       </form>
     </div>
 
     <div>
       <h2>New Post</h2>
-      <form method="POST" action="/api/posts" target="hiddenFrame">
-        <input type="text" name="title">
-        <input type="text" name="description">
-        <input type="submit">
+      <form id="postForm" method="POST">
+        <input type="text" name="title" />
+        <input type="text" name="description" />
+        <input type="submit" />
       </form>
     </div>
 
     <script>
       let main = document.getElementById('main')
       fetch('/api/posts')
-        .then((response) => response.json())
+        .then((r) => r.json())
         .then(
           (posts) =>
             (main.innerHTML = posts
-              .map((post) => `<h2>${post.title}</h2><p>by ${post.user_name}</p><p>${post.description}</p>`)
+              .map(
+                (post) =>
+                  `<h2>${post.title}</h2><p>by ${post.user_name}</p><p>${post.description}</p>`
+              )
               .join(''))
         )
+
+      window.addEventListener('load', function () {
+        function createPost(postForm) {
+          const formData = Array.from(new FormData(postForm))
+          const post = {
+            title: formData[0][1],
+            description: formData[1][1],
+          }
+          console.log(post)
+          fetch('/api/posts', {
+            method: 'POST',
+            headers: {
+              Authorization: localStorage.getItem('accessToken'),
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(post),
+          }).then((r) => console.log(r))
+        }
+        function loginUser(loginForm) {
+          const formData = Array.from(new FormData(loginForm))
+          const user = {
+            username: formData[0][1],
+            password: formData[1][1],
+          }
+          fetch('/api/login', {
+            method: 'POST',
+            headers: {
+              Accept: 'application/json',
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(user),
+          })
+            .then((r) => r.json())
+            .then((r) => localStorage.setItem('accessToken', r.accessToken))
+        }
+
+        const postForm = document.getElementById('postForm')
+
+        postForm.addEventListener('submit', function (event) {
+          event.preventDefault()
+          createPost(postForm)
+        })
+
+        const loginForm = document.getElementById('loginForm')
+
+        loginForm.addEventListener('submit', function (event) {
+          event.preventDefault()
+          loginUser(loginForm)
+        })
+      })
     </script>
   </body>
 </html>
