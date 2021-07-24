@@ -12,3 +12,5 @@ Add this to `.env`:
 ```
 PGCONNECTION=postgres://postgres:1234@localhost:4242/target
 ```
+
+PGPASSWORD=1234 psql -h frankfurt-postgres.render.com -U target target -f db.sql

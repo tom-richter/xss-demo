@@ -6,9 +6,12 @@ require('dotenv').config()
 const app = express()
 const port = 3000
 
-console.log('PGCON', process.env.PGCONNECTION)
 const client = new Client({ connectionString: process.env.PGCONNECTION })
 client.connect()
+
+app.use(express.urlencoded({
+  extended: true
+}))
 
 const posts = [
   {
@@ -34,6 +37,19 @@ app.get('/api/posts', (req, res) => {
     .query('SELECT * FROM post')
     .then((queryRes) => res.json(queryRes.rows))
     .catch((e) => console.error(e.stack))
+})
+
+app.post('/api/posts', (req, res) => {
+  const post = req.body
+  client
+    .query(`INSERT INTO post(user_name, title, description) VALUES ('admin', '${post.title}', '${post.description}')`)
+    .then((queryRes) => res.status(201).end())
+    .catch((e) => console.error(e.stack))
+})
+
+app.post('/api/login', (req, res) => {
+  console.log(req.body)
+  res.end()
 })
 
 app.listen(port, () => {

@@ -7,8 +7,30 @@
     <title>Document</title>
   </head>
   <body>
+    <style>
+      .hide { position:absolute; top:-1px; left:-1px; width:1px; height:1px; }
+    </style>
     <h1>Welcome to my awesome blog!</h1>
     <main id="main"></main>
+    <iframe name="hiddenFrame" class="hide"></iframe>
+
+    <div>
+      <h2>Login</h2>
+      <form method="POST" action="/api/login" target="hiddenFrame">
+        <input type="text" name="username">
+        <input type="password" name="password">
+        <input type="submit">
+      </form>
+    </div>
+
+    <div>
+      <h2>New Post</h2>
+      <form method="POST" action="/api/posts" target="hiddenFrame">
+        <input type="text" name="title">
+        <input type="text" name="description">
+        <input type="submit">
+      </form>
+    </div>
 
     <script>
       let main = document.getElementById('main')
@@ -17,7 +39,7 @@
         .then(
           (posts) =>
             (main.innerHTML = posts
-              .map((post) => `<h2>${post.title}</h2><p>${post.description}</p>`)
+              .map((post) => `<h2>${post.title}</h2><p>by ${post.user_name}</p><p>${post.description}</p>`)
               .join(''))
         )
     </script>
