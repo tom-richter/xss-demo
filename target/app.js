@@ -56,7 +56,10 @@ app.post('/api/posts', authenticateToken, (req, res) => {
     .query(
       `INSERT INTO post(user_name, title, description) VALUES ('${
         req.user.name
-      }', '${post.title.replaceAll("'", "''")}', '${post.description.replaceAll("'", "''")}')`
+      }', '${post.title.replace(/'/g, "''")}', '${post.description.replace(
+        /'/g,
+        "''"
+      )}')`
     )
     .then((queryRes) => res.status(201).end())
     .catch((e) => console.error(e.stack))
