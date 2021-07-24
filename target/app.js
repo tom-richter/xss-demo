@@ -6,6 +6,7 @@ require('dotenv').config()
 const app = express()
 const port = 3000
 
+console.log('PGCON', process.env.PGCONNECTION)
 const client = new Client({ connectionString: process.env.PGCONNECTION })
 client.connect()
 
