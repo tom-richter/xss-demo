@@ -1,7 +1,13 @@
 const express = require('express')
 const path = require('path')
+const { Client } = require('pg')
+require('dotenv').config()
+
 const app = express()
 const port = 3000
+
+const client = new Client({ connectionString: process.env.PGCONNECTION })
+client.connect()
 
 const posts = [
   {
@@ -23,7 +29,10 @@ app.get('/', function (req, res) {
 })
 
 app.get('/api/posts', (req, res) => {
-  res.json(posts)
+  client
+    .query('SELECT * FROM post')
+    .then((queryRes) => res.json(queryRes.rows))
+    .catch((e) => console.error(e.stack))
 })
 
 app.listen(port, () => {
