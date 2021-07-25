@@ -50,6 +50,14 @@
     </div>
 
     <script>
+      const charsToReplace = {
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+      }
+      function escapeHtml(str) {
+        return str.replace(/[&<>]/g, (char) => charsToReplace[char])
+      }
       let main = document.getElementById('main')
       fetch('/api/posts')
         .then((r) => r.json())
