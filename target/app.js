@@ -43,13 +43,6 @@ app.get('/api/profile', authenticateToken, (req, res) => {
   res.json(req.user)
 })
 
-app.get('/api/users', authenticateToken, (req, res) => {
-  client
-    .query('SELECT * FROM users')
-    .then((queryRes) => res.json(queryRes.rows))
-    .catch((e) => console.error(e.stack))
-})
-
 app.post('/api/posts', authenticateToken, (req, res) => {
   const post = req.body
   client
