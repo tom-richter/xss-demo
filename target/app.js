@@ -78,6 +78,19 @@ app.post('/api/login', async (req, res) => {
   }
 })
 
+app.post('/api/register', async (req, res) => {
+  const user = req.body
+  client
+    .query(
+      `INSERT INTO users(name, password) VALUES ('${user.username.replace(
+        /'/g,
+        "''"
+      )}', '${user.password.replace(/'/g, "''")}')`
+    )
+    .then((queryRes) => res.status(201).end())
+    .catch((e) => console.error(e.stack))
+})
+
 function generateAccessToken(user) {
   return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {
     expiresIn: '36000s',
