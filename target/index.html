@@ -130,18 +130,8 @@
       function escapeHtml(str) {
         return str.replace(/[&<>]/g, (char) => charsToReplace[char])
       }
-      let main = document.getElementById('main')
-      fetch('/api/posts')
-        .then((r) => r.json())
-        .then(
-          (posts) =>
-            (main.innerHTML = posts
-              .map(
-                (post) =>
-                  `<hr><h3>${post.title}</h3><p><i>by ${post.user_name}</i></p><p>${post.description}</p>`
-              )
-              .join(''))
-        )
+
+      let user
 
       fetch('/api/profile', {
         headers: {
@@ -150,7 +140,8 @@
         },
       })
         .then((r) => r.json())
-        .then((user) => {
+        .then((responseUser) => {
+          user = responseUser
           document.getElementById(
             'welcome'
           ).innerHTML = `Welcome to my super secure blog, ${user.name}!`
@@ -159,6 +150,30 @@
         .catch((e) => {
           document.getElementById('postFormWrapper').style.display = 'none'
           document.getElementById('logoutButton').style.display = 'none'
+        })
+        .finally(() => {
+          let main = document.getElementById('main')
+          fetch('/api/posts')
+            .then((r) => r.json())
+            .then(
+              (posts) =>
+                (main.innerHTML = posts
+                  .map(
+                    (post) =>
+                      `<hr>
+                  <h3>
+                    ${post.title}
+                    ${
+                      user && user.name === post.user_name
+                        ? `<button type="button" class="postdeletebutton btn btn-outline-danger postdeletebutton" onclick="deletePost(${post.id})">Delete</button>`
+                        : ''
+                    }
+                  </h3>
+                  <p><i>by ${post.user_name}</i></p>
+                  <p>${post.description}</p>`
+                  )
+                  .join(''))
+            )
         })
 
       window.addEventListener('load', function () {
@@ -215,11 +230,10 @@
               'Content-Type': 'application/json',
             },
             body: JSON.stringify(user),
+          }).then((r) => {
+            registerForm.reset()
+            location.reload()
           })
-            .then((r) => {
-              registerForm.reset()
-              location.reload()
-            })
         }
 
         const postForm = document.getElementById('postForm')
@@ -244,6 +258,17 @@
       function logout() {
         localStorage.clear()
         location.reload()
+      }
+
+      function deletePost(postId) {
+        fetch(`/api/posts/${postId}`, {
+          method: 'DELETE',
+          headers: {
+            Authorization: localStorage.getItem('accessToken'),
+          },
+        }).then((r) => {
+          location.reload()
+        })
       }
     </script>
     <style>

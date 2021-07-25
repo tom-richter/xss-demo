@@ -58,6 +58,18 @@ app.post('/api/posts', authenticateToken, (req, res) => {
     .catch((e) => console.error(e.stack))
 })
 
+app.delete('/api/posts/:id', authenticateToken, async (req, res) => {
+  const queryRes = await client.query(
+    `SELECT * FROM post WHERE id=${req.params.id}`
+  )
+  if (queryRes.rows.length) {
+    if (queryRes.rows[0].user_name === req.user.name) {
+      await client.query(`DELETE FROM post WHERE id=${req.params.id}`)
+    }
+  }
+  res.status(200).end()
+})
+
 app.post('/api/login', async (req, res) => {
   const queryRes = await client.query(
     `SELECT * FROM users WHERE name='${req.body.username}' AND password='${req.body.password}'`
