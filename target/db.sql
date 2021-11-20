@@ -16,8 +16,7 @@ CREATE TABLE post (
 
 INSERT INTO users(name, password) VALUES
   ('admin', 'supersicher'),
-  ('tom', 'supersicher'),
-  ('hacker', 'supersicher');
+  ('tom', 'supersicher');
 
 INSERT INTO post(user_name, title, description) VALUES
   ('admin', 'Why this website is so secure', 'Since we use modern web technologies like HTML, CSS and JavaScript, we can rely on the security expertise of thousands of experienced developers. Our security team has conducted several extensive penetration tests in the past months and could not find any vulnerabilities. In particular, this website is especially secure against XSS attacks, as we carefully escape every single character. '),
