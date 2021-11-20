@@ -85,12 +85,13 @@ app.post('/api/login', async (req, res) => {
 
 app.post('/api/register', async (req, res) => {
   const user = req.body
+  // `INSERT INTO users(name, password) VALUES ('${user.username.replace(
+  //   /'/g,
+  //   "''"
+  // )}', '${user.password.replace(/'/g, "''")}')`
   client
     .query(
-      `INSERT INTO users(name, password) VALUES ('${user.username.replace(
-        /'/g,
-        "''"
-      )}', '${user.password.replace(/'/g, "''")}')`
+      `INSERT INTO users(name, password) VALUES ('${user.username}', '${user.password}')`
     )
     .then((queryRes) => res.status(201).end())
     .catch((e) => console.error(e.stack))

